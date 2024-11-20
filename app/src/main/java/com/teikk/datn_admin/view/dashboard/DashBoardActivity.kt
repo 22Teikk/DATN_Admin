@@ -15,7 +15,9 @@ class DashBoardActivity : BaseActivity<ActivityDashBoardBinding>() {
     }
 
     override fun init() {
-//        navController = findNavController(R.id.dashboardNavController)
+        navController = findNavController(R.id.dashboardNavController)
+        binding.bottomNavigationView.menu.getItem(2).isEnabled = false
+
     }
 
 

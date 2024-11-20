@@ -1,0 +1,25 @@
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/reportFragment"
+        android:icon="@drawable/icon_report"
+        android:title="@string/report" />
+    <item
+        android:id="@+id/statisticalFragment"
+        android:icon="@drawable/icon_statistical"
+        android:title="@string/statistical" />
+
+    <item
+        android:id="@+id/itemNone"
+        android:title=""/>
+
+    <item
+        android:id="@+id/categoryFragment"
+        android:icon="@drawable/icon_category"
+        android:title="@string/category" />
+    <item
+        android:id="@+id/moreFragment"
+        android:icon="@drawable/icon_more"
+        android:title="@string/more" />
+
+</menu>
