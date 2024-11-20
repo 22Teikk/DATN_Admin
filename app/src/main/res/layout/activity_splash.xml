@@ -23,5 +23,17 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5"
             android:src="@drawable/app_icon" />
+
+        <TextView
+            android:layout_marginTop="@dimen/_50sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/imageView"
+            android:text="Admin"
+            android:gravity="center_horizontal"
+            android:textColor="@color/white"
+            android:fontFamily="@font/sofia_semi_bold"
+            android:textSize="@dimen/_30ssp"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
