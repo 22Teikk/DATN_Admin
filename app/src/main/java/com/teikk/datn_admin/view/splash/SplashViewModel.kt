@@ -10,6 +10,7 @@ import com.teikk.datn_admin.data.datasource.repository.RoleRepository
 import com.teikk.datn_admin.utils.ShareConstant.UID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,9 +36,11 @@ class SplashViewModel @Inject constructor(
     }
 
     private fun firstInit() = viewModelScope.launch(Dispatchers.IO) {
-        roleRepository.fetchRoleData()
-        categoryRepository.fetchCategoryData()
-        paymentMethodRepository.fetchPaymentMethodData()
+        async {
+            roleRepository.fetchRoleData()
+            categoryRepository.fetchCategoryData()
+            paymentMethodRepository.fetchPaymentMethodData()
+        }.await()
         _isFirstTime.postValue(true)
     }
 }

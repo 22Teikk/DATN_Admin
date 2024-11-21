@@ -8,4 +8,16 @@
         android:id="@+id/reportFragment"
         android:name="com.teikk.datn_admin.view.dashboard.fragment.ReportFragment"
         android:label="ReportFragment" />
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.teikk.datn_admin.view.dashboard.fragment.CategoryFragment"
+        android:label="CategoryFragment" />
+    <fragment
+        android:id="@+id/moreFragment"
+        android:name="com.teikk.datn_admin.view.dashboard.fragment.MoreFragment"
+        android:label="MoreFragment" />
+    <fragment
+        android:id="@+id/statisticalFragment"
+        android:name="com.teikk.datn_admin.view.dashboard.fragment.StatisticalFragment"
+        android:label="StatisticalFragment" />
 </navigation>
