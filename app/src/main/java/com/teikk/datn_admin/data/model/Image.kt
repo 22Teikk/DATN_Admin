@@ -9,7 +9,7 @@ data class Image(
     @PrimaryKey
     @SerializedName("_id")
     val id: String,
-    val url: String,
+    var url: String,
     @SerializedName("product_id")
     val productId: String,
     @SerializedName("feedback_id")

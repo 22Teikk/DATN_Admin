@@ -12,11 +12,17 @@ data class Product(
     var name: String,
     var description: String,
     var price: Double,
-    var quantity: Int,
+    @SerializedName("quantity_sold")
+    var quantitySold: Int,
     @SerializedName("is_sold")
     var isSold: Boolean,
+    @SerializedName("total_time")
+    var totalTime: Int,
+    var thumbnail: String,
     @SerializedName("category_id")
     var categoryId: String,
     @SerializedName("discount_id")
-    var discountId: String,
+    var discountId: String? = null,
+    @SerializedName("feedback_id")
+    var feedbackId: String? = null
 )

@@ -10,6 +10,7 @@ import com.teikk.datn_admin.data.datasource.repository.RoleRepository
 import com.teikk.datn_admin.utils.ShareConstant.UID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,6 +28,10 @@ class SplashViewModel @Inject constructor(
 
     val uid = sharedPreferences.getStringValue(UID, "")
     init {
+        GlobalScope.launch(Dispatchers.IO) {
+            categoryRepository.deleteAllCategories()
+            categoryRepository.fetchCategoryData()
+        }
         val firstTime = sharedPreferences.getBooleanValue("isFirstTime", true)
         if (firstTime) {
             firstInit()
@@ -38,7 +43,6 @@ class SplashViewModel @Inject constructor(
     private fun firstInit() = viewModelScope.launch(Dispatchers.IO) {
         async {
             roleRepository.fetchRoleData()
-            categoryRepository.fetchCategoryData()
             paymentMethodRepository.fetchPaymentMethodData()
         }.await()
         _isFirstTime.postValue(true)

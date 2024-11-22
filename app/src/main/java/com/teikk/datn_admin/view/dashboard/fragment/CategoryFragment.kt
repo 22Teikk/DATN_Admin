@@ -3,6 +3,7 @@ package com.teikk.datn_admin.view.dashboard.fragment
 import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.teikk.datn_admin.R
 import com.teikk.datn_admin.base.BaseFragment
 import com.teikk.datn_admin.base.GridSpacingItemDecoration
@@ -38,6 +39,10 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
                 val bottomSheet = AddCategoryBottomSheet()
                 bottomSheet.show(parentFragmentManager, bottomSheet.tag)
             }
+        }
+        adapter.listener = { item, position ->
+            val directions = CategoryFragmentDirections.actionCategoryFragmentToProductFragment(item.id)
+            findNavController().navigate(directions)
         }
     }
 

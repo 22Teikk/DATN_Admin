@@ -2,11 +2,14 @@ package com.teikk.datn_admin.data.datasource.service
 
 import com.google.gson.JsonObject
 import com.teikk.datn_admin.data.model.Category
+import com.teikk.datn_admin.data.model.Image
 import com.teikk.datn_admin.data.model.PaymentMethod
+import com.teikk.datn_admin.data.model.Product
 import com.teikk.datn_admin.data.model.Role
 import com.teikk.datn_admin.data.model.Store
 import com.teikk.datn_admin.data.model.UserProfile
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -32,6 +35,17 @@ interface ApiService {
         @Part file: MultipartBody.Part,
     ): Response<JsonObject>
 
+    // Images
+    @Multipart
+    @POST("api/v1/images") // Thay "your_endpoint_here" bằng đường dẫn API
+    suspend fun uploadFiles(
+        @Part("feedback_id") feedbackId: RequestBody?,
+        @Part("product_id") productId: RequestBody?,
+        @Part files: List<MultipartBody.Part>
+    ): Response<List<Image>>
+    // Images
+
+
     @GET("api/v1/roles")
     suspend fun getAllRoles(@HeaderMap header: Map<String, String>) : Response<List<Role>>
 
@@ -50,6 +64,17 @@ interface ApiService {
     @DELETE("api/v1/categories/{id}")
     suspend fun deleteCategory(@HeaderMap adminHeaders: Map<String, String>, @Path("id") id: String) : Response<Void>
     // Category
+
+    // Product
+    @POST("api/v1/products")
+    suspend fun createProduct(@HeaderMap adminHeaders: Map<String, String>, @Body product: Product) : Response<Product>
+    @GET("api/v1/products")
+    suspend fun getAllProducts(@HeaderMap adminHeaders: Map<String, String>): Response<List<Product>>
+    @GET("api/v1/products/{id}")
+    suspend fun getProductById(@HeaderMap adminHeaders: Map<String, String>, @Path("id") id: String): Response<Product>
+    @PUT("api/v1/products/{id}")
+    suspend fun updateProduct(@HeaderMap adminHeaders: Map<String, String>, @Path("id") id: String, @Body product: Product): Response<Product>
+    // Product
 
     // Store
     @GET("api/v1/stores/{id}")

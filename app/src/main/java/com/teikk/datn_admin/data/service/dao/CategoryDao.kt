@@ -18,4 +18,6 @@ interface CategoryDao {
     @Query("SELECT * FROM category_tables")
     fun getAllCategory(): List<Category>
 
+    @Query("DELETE FROM category_tables")
+    fun deleteAllCategories()
 }

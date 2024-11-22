@@ -1,6 +1,10 @@
 package com.teikk.datn_admin.view.dashboard
 
+import android.util.TypedValue
+import android.view.View
 import androidx.activity.viewModels
+import androidx.core.view.marginBottom
+import androidx.core.view.setPadding
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -25,6 +29,25 @@ class DashBoardActivity : BaseActivity<ActivityDashBoardBinding>() {
         }
     }
 
+    fun hideBottomNav() {
+        with(binding) {
+            main.setPadding(0)
+            bottomAppBar.visibility = View.GONE
+            btnChat.visibility = View.GONE
+        }
+    }
+
+    fun showBottomNav() {
+        with( binding) {
+            val tv = TypedValue()
+            if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+                val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+                main.setPadding(0, 0, 0, actionBarHeight + 5)
+            }
+            bottomAppBar.visibility = View.VISIBLE
+            btnChat.visibility = View.VISIBLE
+        }
+    }
 
     companion object {
         const val TAG = "DashBoardActivityTag"

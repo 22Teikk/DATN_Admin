@@ -30,11 +30,13 @@ class CategoryRepository @Inject constructor(
 
     }
 
-    suspend fun createCategory(category: Category) = runBlocking {
+    fun createCategory(category: Category) = runBlocking {
         async {
             categoryLocalRepository.insertCategories(listOf(category))
             categoryRemoteRepository.createCategory(category)
         }.await()
         fetchCategoryData()
     }
+
+    suspend fun deleteAllCategories() = categoryLocalRepository.deleteAllCategories()
 }

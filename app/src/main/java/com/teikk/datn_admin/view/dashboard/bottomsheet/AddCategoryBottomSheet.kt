@@ -22,8 +22,15 @@ class AddCategoryBottomSheet : BaseBottomSheet<BottomSheetAddCategoryBinding>() 
         return R.layout.bottom_sheet_add_category
     }
 
+    override fun initView() {
+        isCancelable = false
+    }
+
     override fun initEvent() {
         with(binding) {
+            icExit.setOnClickListener {
+                dismiss()
+            }
             btnSelectImage.setOnClickListener {
                 val intent = Intent().apply {
                     type = "image/*"
@@ -32,7 +39,7 @@ class AddCategoryBottomSheet : BaseBottomSheet<BottomSheetAddCategoryBinding>() 
                 arl.launch(intent)
             }
             btnDone.setOnClickListener {
-                val name = edtCategoryName.text.toString()
+                val name = edtName.text.toString()
                 if (name.isBlank()) {
                     return@setOnClickListener
                 }
