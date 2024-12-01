@@ -35,6 +35,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
+                    android:src="@drawable/icon_logout"
+                    android:padding="@dimen/_5sdp"
                     android:id="@+id/btnLogout" />
             </androidx.cardview.widget.CardView>
         </LinearLayout>

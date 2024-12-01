@@ -38,6 +38,7 @@ class OrderDetailFragment(
         with(binding) {
             txtType.text = if (args.order.isShipment) "Delivery" else "Pick Up"
             edtDescription.setText(args.order.description)
+            btnSubmit.text = if (args.order.status == "Pending") "Delivery" else "Delivered"
         }
     }
 

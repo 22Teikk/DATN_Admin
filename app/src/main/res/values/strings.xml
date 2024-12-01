@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Datn_Admin</string>
+    <string name="app_name">Employee</string>
 
     <string name="permission_one">Turn on notifications for:\n• Alerting others of your location.\n• Tracking the location of others.\n• Safety and Security: receive alerts when someone requests to share their location with you to helps you control who has access to your location.</string>
     <string name="permission_two">The Location permission enables the app to access your current location. This is necessary for the app:\n• To share your location with your friend.\n• In emergency cases, the app can send SOS alerts immediately with your location to friends.</string>

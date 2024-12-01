@@ -12,11 +12,13 @@ import com.teikk.datn_admin.data.model.Order
 import com.teikk.datn_admin.data.model.OrderItem
 import com.teikk.datn_admin.data.model.UserProfile
 import com.teikk.datn_admin.data.service.socket.SocketManager
+import com.teikk.datn_admin.utils.NotificationHelper
 import com.teikk.datn_admin.utils.ShareConstant.UID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +28,8 @@ class DashBoardViewModel @Inject constructor(
     private val orderRepository: OrderRepository,
     private val userProfileRepository: UserProfileRepository,
     private val socketManager: SocketManager,
-    private val sharedPreferenceUtils: SharedPreferenceUtils
+    private val sharedPreferenceUtils: SharedPreferenceUtils,
+    private val notificationHelper: NotificationHelper
 
 ) : ViewModel() {
     val products = productRepository.products
@@ -51,7 +54,8 @@ class DashBoardViewModel @Inject constructor(
         socketManager.socketConnect()
         socketManager.joinEmployee(uid)
         socketManager.onNewOrder {
-            Log.d("Sldkfjalksdfjaklsd", "Update DataNow")
+            Log.d("ajskdfhkajdsfa", "Have new Order")
+            notificationHelper.showNotification("New Order", "You have new order from customer")
             initData()
         }
     }
@@ -112,6 +116,16 @@ class DashBoardViewModel @Inject constructor(
                 updatedDeliveryList.remove(order) // Xóa order khỏi pending
                 _orderDelivery.value = updatedDeliveryList
             }
+            socketManager.sendMessage(order.userId, uid, order.id)
+            initData()
+        }
+    }
+
+    fun logout(callback: () -> Unit) = viewModelScope.launch(Dispatchers.IO) {
+        sharedPreferenceUtils.putStringValue(UID, "")
+        userProfileRepository.deleteAllUser()
+        withContext(Dispatchers.Main) {
+            callback()
         }
     }
 }

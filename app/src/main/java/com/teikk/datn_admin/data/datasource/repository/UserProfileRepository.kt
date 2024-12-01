@@ -14,4 +14,5 @@ class UserProfileRepository @Inject constructor(
 
     suspend fun saveUserToRemote(userProfile: UserProfile) = userProfileRemoteRepository.updateUserProfile(userProfile)
     suspend fun getUserProfile(uid: String) = userProfileRemoteRepository.getUserProfile(uid)
+    suspend fun deleteAllUser() = userProfileLocalRepository.deleteAllUser()
 }

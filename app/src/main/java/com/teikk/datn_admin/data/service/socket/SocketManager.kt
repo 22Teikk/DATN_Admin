@@ -46,13 +46,6 @@ class SocketManager @Inject constructor(
         mSocket.emit("employee_join", data)
     }
 
-    fun assignCustomer(customerId: String, employeeId: String) {
-        val data = JSONObject()
-        data.put("customer_id", customerId)
-        data.put("employee_id", employeeId)
-        mSocket.emit("assign_customer", data)
-    }
-
     fun sendMessage(customerId: String, employeeId: String, message: String) {
         val data = JSONObject()
         data.put("customer_id", customerId)
