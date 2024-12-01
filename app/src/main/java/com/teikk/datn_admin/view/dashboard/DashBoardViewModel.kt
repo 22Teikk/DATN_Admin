@@ -3,74 +3,115 @@ package com.teikk.datn_admin.view.dashboard
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide.init
-import com.teikk.datn_admin.data.datasource.repository.CategoryRepository
+import com.teikk.datn_admin.base.SharedPreferenceUtils
+import com.teikk.datn_admin.data.datasource.repository.OrderItemRepository
+import com.teikk.datn_admin.data.datasource.repository.OrderRepository
 import com.teikk.datn_admin.data.datasource.repository.ProductRepository
-import com.teikk.datn_admin.data.datasource.repository.UploadFileRepository
-import com.teikk.datn_admin.data.model.Category
-import com.teikk.datn_admin.data.model.Image
-import com.teikk.datn_admin.data.model.Product
+import com.teikk.datn_admin.data.datasource.repository.UserProfileRepository
+import com.teikk.datn_admin.data.model.Order
+import com.teikk.datn_admin.data.model.OrderItem
+import com.teikk.datn_admin.data.model.UserProfile
+import com.teikk.datn_admin.data.service.socket.SocketManager
+import com.teikk.datn_admin.utils.ShareConstant.UID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class DashBoardViewModel @Inject constructor(
-    private val categoryRepository: CategoryRepository,
-    private val uploadFileRepository: UploadFileRepository,
     private val productRepository: ProductRepository,
+    private val orderItemRepository: OrderItemRepository,
+    private val orderRepository: OrderRepository,
+    private val userProfileRepository: UserProfileRepository,
+    private val socketManager: SocketManager,
+    private val sharedPreferenceUtils: SharedPreferenceUtils
 
 ) : ViewModel() {
-    val category = categoryRepository.categoriesLiveData
     val products = productRepository.products
+    private val _orderPending = MutableStateFlow<List<Order>>(emptyList())
+    val orderPending get()= _orderPending
+    private val _orderDelivery = MutableStateFlow<List<Order>>(emptyList())
+    val orderDelivery get()= _orderDelivery
+    private val _orderItem = MutableStateFlow<List<OrderItem>>(emptyList())
+    val orderItem get()= _orderItem
+    private val _user = MutableStateFlow<UserProfile>(UserProfile())
+    val user get()= _user
+    val uid: String by lazy {
+        sharedPreferenceUtils.getStringValue(UID, "")
+    }
+
     init {
-        fetchCategoryData()
         fetchProductData()
+        initSocket()
     }
 
-    private fun fetchCategoryData() = viewModelScope.launch(Dispatchers.IO) {
-        categoryRepository.fetchCategoryData()
-    }
-
-    fun uploadFile(file: File, callback: (String?) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
-        val result = uploadFileRepository.uploadFile(file)
-        withContext(Dispatchers.Main) {
-            callback(result)
+    fun initSocket() {
+        socketManager.socketConnect()
+        socketManager.joinEmployee(uid)
+        socketManager.onNewOrder {
+            Log.d("Sldkfjalksdfjaklsd", "Update DataNow")
+            initData()
         }
     }
-    
-    fun createCategory(category: Category) = viewModelScope.launch(Dispatchers.IO) {
-        categoryRepository.createCategory(category)
+
+    fun initData() {
+        fetchOrderPending()
+        fetchOrderDelivery()
     }
-    
+
     private fun fetchProductData() = viewModelScope.launch(Dispatchers.IO) {
         productRepository.fetchProduct()
     }
 
-    fun uploadMultipleImage(productId: String, images :List<Image>, callback: (String) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
-        val files = images.filter {
-            it.url.isNotEmpty()
-        }.map {
-            File(it.url)
-        }.toList()
-        val response = async {
-            uploadFileRepository.uploadImages(productId = productId, files = files, feedbackId = null)
-        }.await()
+    fun fetchOrderItemData(orderID: String) = viewModelScope.launch(Dispatchers.IO) {
+        val response = orderItemRepository.getAllOrderItem(orderID)
         if (response.isSuccessful) {
-            callback(response.body()!![0].url)
-        } else {
-            callback("")
+            _orderItem.value = response.body()!!
         }
     }
     
-    fun createProduct(product: Product, callback: (Boolean) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
-        val response = productRepository.createProduct(product)
-        withContext(Dispatchers.Main) {
-            callback(response.isSuccessful)
+    private fun fetchOrderPending() = viewModelScope.launch(Dispatchers.IO) {
+        val response = orderRepository.getAllOrdersPending()
+        if (response.isSuccessful) {
+            Log.d("sdfjakhsdkjf", response.body().toString())
+            _orderPending.value = response.body()!!
+        }
+    }
+
+    private fun fetchOrderDelivery() = viewModelScope.launch(Dispatchers.IO) {
+        val response = orderRepository.getAllOrdersDelivery()
+        if (response.isSuccessful) {
+            _orderDelivery.value = response.body()!!
+        }
+    }
+
+    fun fetchUserDataByID(uid: String) = viewModelScope.launch(Dispatchers.IO) {
+        val response = userProfileRepository.getUserProfile(uid)
+        if (response.isSuccessful) {
+            Log.d("sdkjfhasdjkf", response.body().toString())
+            _user.value = response.body()!!
+        }
+    }
+
+    fun updateOrder(order: Order) = viewModelScope.launch(Dispatchers.IO) {
+        val response = orderRepository.updateOrder(order)
+        if (response.isSuccessful) {
+            if (order.status == "Delivery") {
+                val updatedPendingList = _orderPending.value.toMutableList()
+                updatedPendingList.remove(order) // Xóa order khỏi pending
+                _orderPending.value = updatedPendingList
+
+                // Thêm item vào danh sách delivery
+                val updatedDeliveryList = _orderDelivery.value.toMutableList()
+                updatedDeliveryList.add(order) // Thêm vào delivery
+                _orderDelivery.value = updatedDeliveryList
+            } else {
+                val updatedDeliveryList = _orderDelivery.value.toMutableList()
+                updatedDeliveryList.remove(order) // Xóa order khỏi pending
+                _orderDelivery.value = updatedDeliveryList
+            }
         }
     }
 }

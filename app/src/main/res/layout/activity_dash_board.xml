@@ -4,69 +4,18 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
+        android:id="@+id/main"
         android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".view.dashboard.DashBoardActivity">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/main"
+        <fragment
+            android:id="@+id/dashboardNavController"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:paddingBottom="?actionBarSize"
-            android:layout_height="match_parent">
-            <FrameLayout
-                android:layout_width="match_parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_height="match_parent">
-                <fragment
-                    android:id="@+id/dashboardNavController"
-                    android:name="androidx.navigation.fragment.NavHostFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:defaultNavHost="true"
-                    app:navGraph="@navigation/dashboard_nav"/>
-            </FrameLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!-- BottomAppBar và FAB -->
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/test"
-            android:layout_gravity="bottom"
-            android:layout_width="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.bottomappbar.BottomAppBar
-                android:id="@+id/bottomAppBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                app:fabAlignmentMode="center"
-                app:fabAnchorMode="cradle"
-                app:fabCradleMargin="15dp"
-                android:backgroundTint="@color/white"
-                app:fabCradleRoundedCornerRadius="10dp"
-                app:fabCradleVerticalOffset="10dp">
-
-                <com.google.android.material.bottomnavigation.BottomNavigationView
-                    android:id="@+id/bottomNavigationView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="16dp"
-                    android:background="@android:color/transparent"
-                    app:menu="@menu/bottom_nav_dashboard" />
-            </com.google.android.material.bottomappbar.BottomAppBar>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnChat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/icon_chat"
-                app:layout_anchor="@id/bottomAppBar" />
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/dashboard_nav"/>
 
     </FrameLayout>
 </layout>

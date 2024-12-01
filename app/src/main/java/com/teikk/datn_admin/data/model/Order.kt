@@ -3,6 +3,7 @@ package com.teikk.datn_admin.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 @Entity(tableName = "order_tables")
 data class Order(
@@ -20,5 +21,6 @@ data class Order(
     @SerializedName("payment_id")
     var paymentId: String,
     @SerializedName("is_shipment")
-    var isShipment: Boolean
-)
+    var isShipment: Boolean,
+    var description: String,
+): Serializable

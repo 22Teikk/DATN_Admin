@@ -23,7 +23,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RemoteDataModule {
 //    private const val BASE_URL = "http://192.168.1.253:5001/"
-    const val BASE_URL = "http://94.237.64.46:5001/"
+//    const val BASE_URL = "http://94.237.64.46:5001/"
+    const val BASE_URL = "http://192.168.0.102:5001/"
 
     @Provides
     @Singleton

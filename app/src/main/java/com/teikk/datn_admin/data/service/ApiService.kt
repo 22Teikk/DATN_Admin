@@ -3,6 +3,8 @@ package com.teikk.datn_admin.data.datasource.service
 import com.google.gson.JsonObject
 import com.teikk.datn_admin.data.model.Category
 import com.teikk.datn_admin.data.model.Image
+import com.teikk.datn_admin.data.model.Order
+import com.teikk.datn_admin.data.model.OrderItem
 import com.teikk.datn_admin.data.model.PaymentMethod
 import com.teikk.datn_admin.data.model.Product
 import com.teikk.datn_admin.data.model.Role
@@ -20,6 +22,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -88,5 +91,24 @@ interface ApiService {
     // User Profile
     @PUT("api/v1/user_profiles/{id}")
     suspend fun updateUserProfile(@HeaderMap adminHeaders: Map<String, String> ,@Path("id") id: String,@Body userProfile: UserProfile) : Response<UserProfile>
+    @GET("api/v1/user_profiles")
+    suspend fun getAllUserProfiles(): Response<List<UserProfile>>
+    @GET("api/v1/user_profiles/{id}")
+    suspend fun getAllUserProfilesByID(
+        @Path("id") id: String
+    ): Response<UserProfile>
     // User Profile
+
+    // ORDER
+    @GET("api/v1/orders/status")
+    suspend fun getAllOrdersByStatus(
+        @Query("status") status: String
+    ): Response<List<Order>>
+    @GET("api/v1/order_items/user")
+    suspend fun getOrderItemForOrder(
+        @Query("order_id") orderId: String
+    ): Response<List<OrderItem>>
+    @PUT("api/v1/orders/{id}")
+    suspend fun updateOrder(@Path("id") id: String,@Body order: Order) : Response<Order>
+    // ORDER
 }

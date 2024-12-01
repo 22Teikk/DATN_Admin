@@ -6,5 +6,12 @@
         <item name="backgroundColor">@color/white</item>
     </style>
 
+    <style name="tabTheme" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/orange</item>
+        <item name="tabIndicator">@drawable/tab_indicator_order</item>
+        <!--        <item name="tabIndicatorFullWidth">true</item>-->
+        <!--        <item name="tabIndicatorGravity">stretch</item>-->
+    </style>
+
     <style name="Theme.Datn_Admin" parent="Base.Theme.Datn_Admin" />
 </resources>
