@@ -16,6 +16,7 @@ import com.teikk.datn_admin.data.datasource.repository.PaymentMethodRepository
 import com.teikk.datn_admin.data.datasource.repository.ProductRepository
 import com.teikk.datn_admin.data.datasource.repository.RoleRepository
 import com.teikk.datn_admin.data.datasource.repository.UserProfileRepository
+import com.teikk.datn_admin.data.datasource.repository.WorkingRepository
 import com.teikk.datn_admin.data.datasource.service.ApiService
 import dagger.Module
 import dagger.Provides
@@ -50,4 +51,8 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideOrderRepository(apiService: ApiService) = OrderRepository(apiService)
+
+    @Provides
+    @Singleton
+    fun provideWorkingRepository(apiService: ApiService) = WorkingRepository(apiService)
 }

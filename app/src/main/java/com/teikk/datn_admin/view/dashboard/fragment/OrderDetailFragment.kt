@@ -3,6 +3,7 @@ package com.teikk.datn_admin.view.dashboard.fragment
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
@@ -39,6 +40,7 @@ class OrderDetailFragment(
             txtType.text = if (args.order.isShipment) "Delivery" else "Pick Up"
             edtDescription.setText(args.order.description)
             btnSubmit.text = if (args.order.status == "Pending") "Delivery" else "Delivered"
+            if (args.isReport) btnSubmit.visibility = View.GONE else btnSubmit.visibility = View.VISIBLE
         }
     }
 

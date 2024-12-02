@@ -10,6 +10,9 @@
         <action
             android:id="@+id/action_orderFragment_to_orderDetailFragment"
             app:destination="@id/orderDetailFragment" />
+        <action
+            android:id="@+id/action_orderFragment_to_reportFragment"
+            app:destination="@id/reportFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderDetailFragment"
@@ -18,5 +21,17 @@
         <argument
             android:name="order"
             app:argType="com.teikk.datn_admin.data.model.Order" />
+        <argument
+            android:name="isReport"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.teikk.datn_admin.view.dashboard.fragment.ReportFragment"
+        android:label="ReportFragment" >
+        <action
+            android:id="@+id/action_reportFragment_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment" />
     </fragment>
 </navigation>

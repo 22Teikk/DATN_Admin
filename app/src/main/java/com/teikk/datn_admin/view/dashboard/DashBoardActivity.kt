@@ -1,12 +1,21 @@
 package com.teikk.datn_admin.view.dashboard
 
+import android.util.Log
+import android.view.View
+import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
 import com.teikk.datn_admin.R
 import com.teikk.datn_admin.base.BaseActivity
 import com.teikk.datn_admin.databinding.ActivityDashBoardBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DashBoardActivity : BaseActivity<ActivityDashBoardBinding>() {

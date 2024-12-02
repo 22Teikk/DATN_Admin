@@ -6,6 +6,17 @@ import java.util.Date
 import java.util.Locale
 
 object DateTimeConstant {
+    fun getCurrentDateStr(format: String = "yyyy-MM-dd"): String {
+        val now = Date()
+        val formatter = SimpleDateFormat(format, Locale.getDefault())
+        return formatter.format(now)
+    }
+
+    fun getCurrentDate(): Date {
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return formatter.parse(getCurrentDateStr())?: Date()
+    }
+
     fun getCurrentTimestampStr(): String {
         val now = Date()
         val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())

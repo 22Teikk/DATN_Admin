@@ -10,6 +10,7 @@ import com.teikk.datn_admin.data.model.Product
 import com.teikk.datn_admin.data.model.Role
 import com.teikk.datn_admin.data.model.Store
 import com.teikk.datn_admin.data.model.UserProfile
+import com.teikk.datn_admin.data.model.Working
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -104,6 +105,10 @@ interface ApiService {
     suspend fun getAllOrdersByStatus(
         @Query("status") status: String
     ): Response<List<Order>>
+    @GET("api/v1/orders/{id}")
+    suspend fun getOrderByID(
+        @Path("id") id: String
+    ): Response<Order>
     @GET("api/v1/order_items/user")
     suspend fun getOrderItemForOrder(
         @Query("order_id") orderId: String
@@ -111,4 +116,14 @@ interface ApiService {
     @PUT("api/v1/orders/{id}")
     suspend fun updateOrder(@Path("id") id: String,@Body order: Order) : Response<Order>
     // ORDER
+
+    // Working
+    @GET("api/v1/working/type")
+    suspend fun getAllWorkingByType(
+        @Query("user_id") uid: String,
+        @Query("type") type: String
+    ): Response<List<Working>>
+    @POST("api/v1/working")
+    suspend fun createWorking(@Body working: Working) : Response<Working>
+    // Working
 }

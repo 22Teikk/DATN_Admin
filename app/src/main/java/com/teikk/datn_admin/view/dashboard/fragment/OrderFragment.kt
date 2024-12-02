@@ -10,9 +10,12 @@ import com.teikk.datn_admin.R
 import com.teikk.datn_admin.base.BaseFragment
 import com.teikk.datn_admin.databinding.FragmentOrderBinding
 import com.teikk.datn_admin.view.authentication.AuthenticationActivity
+import com.teikk.datn_admin.view.dashboard.DashBoardActivity
 import com.teikk.datn_admin.view.dashboard.DashBoardViewModel
 import com.teikk.datn_admin.view.dashboard.adapter.OrderViewPagerAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OrderFragment : BaseFragment<FragmentOrderBinding>() {
     private val viewModel by activityViewModels<DashBoardViewModel>()
     override fun getLayoutResId(): Int {
@@ -43,6 +46,10 @@ class OrderFragment : BaseFragment<FragmentOrderBinding>() {
                     flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 })
             }
+        }
+        binding.btnReport.setOnClickListener {
+            val directions = OrderFragmentDirections.actionOrderFragmentToReportFragment()
+            findNavController().navigate(directions)
         }
     }
 

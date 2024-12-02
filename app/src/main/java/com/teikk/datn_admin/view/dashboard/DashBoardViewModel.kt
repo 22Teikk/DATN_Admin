@@ -8,9 +8,11 @@ import com.teikk.datn_admin.data.datasource.repository.OrderItemRepository
 import com.teikk.datn_admin.data.datasource.repository.OrderRepository
 import com.teikk.datn_admin.data.datasource.repository.ProductRepository
 import com.teikk.datn_admin.data.datasource.repository.UserProfileRepository
+import com.teikk.datn_admin.data.datasource.repository.WorkingRepository
 import com.teikk.datn_admin.data.model.Order
 import com.teikk.datn_admin.data.model.OrderItem
 import com.teikk.datn_admin.data.model.UserProfile
+import com.teikk.datn_admin.data.model.Working
 import com.teikk.datn_admin.data.service.socket.SocketManager
 import com.teikk.datn_admin.utils.NotificationHelper
 import com.teikk.datn_admin.utils.ShareConstant.UID
@@ -29,7 +31,8 @@ class DashBoardViewModel @Inject constructor(
     private val userProfileRepository: UserProfileRepository,
     private val socketManager: SocketManager,
     private val sharedPreferenceUtils: SharedPreferenceUtils,
-    private val notificationHelper: NotificationHelper
+    private val notificationHelper: NotificationHelper,
+    private val workingRepository: WorkingRepository
 
 ) : ViewModel() {
     val products = productRepository.products
@@ -39,6 +42,15 @@ class DashBoardViewModel @Inject constructor(
     val orderDelivery get()= _orderDelivery
     private val _orderItem = MutableStateFlow<List<OrderItem>>(emptyList())
     val orderItem get()= _orderItem
+    
+    private val _working = MutableStateFlow<List<Working>>(emptyList())
+    val working get()= _working
+    private val _workingDelivered = MutableStateFlow<List<Working>>(emptyList())
+    val workingDelivered get()= _workingDelivered
+
+    private val _orderWorking = MutableStateFlow<List<Order>>(emptyList())
+    val orderWorking get()= _orderWorking
+
     private val _user = MutableStateFlow<UserProfile>(UserProfile())
     val user get()= _user
     val uid: String by lazy {
@@ -46,6 +58,7 @@ class DashBoardViewModel @Inject constructor(
     }
 
     init {
+        fetchUserDataByID(uid)
         fetchProductData()
         initSocket()
     }
@@ -63,6 +76,8 @@ class DashBoardViewModel @Inject constructor(
     fun initData() {
         fetchOrderPending()
         fetchOrderDelivery()
+        fetchWorking()
+        fetchWorkingDelivered()
     }
 
     private fun fetchProductData() = viewModelScope.launch(Dispatchers.IO) {
@@ -91,10 +106,25 @@ class DashBoardViewModel @Inject constructor(
         }
     }
 
-    fun fetchUserDataByID(uid: String) = viewModelScope.launch(Dispatchers.IO) {
-        val response = userProfileRepository.getUserProfile(uid)
+    private fun fetchWorking() = viewModelScope.launch(Dispatchers.IO) {
+        val response = workingRepository.getAllWorking(uid)
         if (response.isSuccessful) {
-            Log.d("sdkjfhasdjkf", response.body().toString())
+            _working.value = response.body()!!
+        }
+    }
+
+    private fun fetchWorkingDelivered() = viewModelScope.launch(Dispatchers.IO) {
+        val response = workingRepository.getAllDelivered(uid)
+        if (response.isSuccessful) {
+            _workingDelivered.value = response.body()!!
+        }
+    }
+
+    fun fetchUserDataByID(uid: String) = viewModelScope.launch(Dispatchers.IO) {
+        Log.d("sdkjfhasdjkf", uid)
+        val response = userProfileRepository.getUserProfile(uid)
+        Log.d("sdkjfhasdjkf", response.body().toString())
+        if (response.isSuccessful) {
             _user.value = response.body()!!
         }
     }
@@ -111,14 +141,22 @@ class DashBoardViewModel @Inject constructor(
                 val updatedDeliveryList = _orderDelivery.value.toMutableList()
                 updatedDeliveryList.add(order) // Thêm vào delivery
                 _orderDelivery.value = updatedDeliveryList
+                createWorking(Working(userId = uid, orderId = order.id, type = "Working"))
             } else {
                 val updatedDeliveryList = _orderDelivery.value.toMutableList()
                 updatedDeliveryList.remove(order) // Xóa order khỏi pending
                 _orderDelivery.value = updatedDeliveryList
+                if (order.isShipment) {
+                    createWorking(Working(userId = uid, orderId = order.id, type = "Delivered"))
+                }
             }
             socketManager.sendMessage(order.userId, uid, order.id)
             initData()
         }
+    }
+
+    fun createWorking(working: Working) = viewModelScope.launch {
+        workingRepository.createWorking(working)
     }
 
     fun logout(callback: () -> Unit) = viewModelScope.launch(Dispatchers.IO) {
@@ -127,5 +165,16 @@ class DashBoardViewModel @Inject constructor(
         withContext(Dispatchers.Main) {
             callback()
         }
+    }
+
+    fun fetchOrderByWorking(orderIds: List<String>) = viewModelScope.launch(Dispatchers.IO) {
+        val listOrder = mutableListOf<Order>()
+        for (orderId in orderIds) {
+            val response = orderRepository.getOrderByID(orderId)
+            if (response.isSuccessful) {
+                listOrder.add(response.body()!!)
+            }
+        }
+        _orderWorking.value = listOrder
     }
 }

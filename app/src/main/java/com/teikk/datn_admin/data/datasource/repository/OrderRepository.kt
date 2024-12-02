@@ -10,4 +10,5 @@ class OrderRepository @Inject constructor(
     suspend fun getAllOrdersPending() = apiService.getAllOrdersByStatus("Pending")
     suspend fun getAllOrdersDelivery() = apiService.getAllOrdersByStatus("Delivery")
     suspend fun updateOrder(order: Order) = apiService.updateOrder(order.id, order)
+    suspend fun getOrderByID(orderID: String) = apiService.getOrderByID(orderID)
 }
