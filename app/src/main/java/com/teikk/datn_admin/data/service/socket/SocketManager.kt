@@ -54,6 +54,15 @@ class SocketManager @Inject constructor(
         mSocket.emit("private_message", data)
     }
 
+    fun sendLocation(customerId: String, orderId: String, lat: Double, long: Double) {
+        val data = JSONObject()
+        data.put("customer_id", customerId)
+        data.put("order_id", orderId)
+        data.put("lat", lat)
+        data.put("long", long)
+        mSocket.emit("send_location", data)
+    }
+
     fun socketDisconnect() {
         socketOff()
         mSocket.disconnect()

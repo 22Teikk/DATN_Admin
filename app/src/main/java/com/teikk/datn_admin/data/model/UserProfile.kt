@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.teikk.datn_admin.utils.DateTimeConstant
+import java.io.Serializable
 
 @Entity(tableName = "user_table")
 data class UserProfile(
@@ -27,4 +28,4 @@ data class UserProfile(
     @SerializedName("store_id")
     var storeId: String? = null,
     var username: String = ""
-)
+): Serializable

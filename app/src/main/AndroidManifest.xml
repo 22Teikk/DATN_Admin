@@ -3,9 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!--    Permission Acitvity-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Permission Acitvity -->
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -13,7 +11,6 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <!--    Permission Acitvity-->
 
     <application
         android:name=".MyApp"
@@ -22,27 +19,44 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Datn_Admin"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${apiKey}" />
+
+        <activity
+            android:name=".view.map.MapsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_maps" >
+        </activity>
         <activity
             android:name=".view.splash.SplashActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.authentication.AuthenticationActivity"
-            android:exported="false"/>
-        <activity android:name=".view.permission.PermissionActivity"
-            android:exported="false"/>
-        <activity android:name=".view.dashboard.DashBoardActivity"
-            android:exported="false">
-        </activity>
+        <activity
+            android:name=".view.authentication.AuthenticationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.permission.PermissionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.dashboard.DashBoardActivity"
+            android:exported="false"></activity>
+
+        <service
+            android:name=".data.service.ServiceLocation"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="location" />
     </application>
 
 </manifest>

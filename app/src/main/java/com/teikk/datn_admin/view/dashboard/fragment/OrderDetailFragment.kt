@@ -18,6 +18,7 @@ import com.teikk.datn_admin.data.data.ProductOrderItem
 import com.teikk.datn_admin.databinding.FragmentOrderDetailBinding
 import com.teikk.datn_admin.view.dashboard.DashBoardViewModel
 import com.teikk.datn_admin.view.dashboard.adapter.OrderItemAdapter
+import com.teikk.datn_admin.view.map.MapsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -69,9 +70,10 @@ class OrderDetailFragment(
                     viewModel.updateOrder(args.order.copy(status = "Delivery"))
                     findNavController().navigateUp()
                 } else {
-                    viewModel.updateOrder(args.order.copy(status = "Delivered"))
-                    findNavController().navigateUp()
-                    // If you want to update map
+                    val intent = Intent(requireContext(), MapsActivity::class.java)
+                    intent.putExtra("order", args.order)
+                    intent.putExtra("user", viewModel.user.value)
+                    startActivity(intent)
                 }
             }
         }
