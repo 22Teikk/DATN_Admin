@@ -55,7 +55,6 @@ class MapsActivity : BaseActivity<ActivityMapsBinding>(), OnMapReadyCallback, Se
     private lateinit var mapGG: GoogleMap
     private lateinit var sensorManager: SensorManager
     private var myMarker: Marker? = null
-    private var lastSentTime: Long = 0
 
     private val fusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(this)
@@ -223,12 +222,7 @@ class MapsActivity : BaseActivity<ActivityMapsBinding>(), OnMapReadyCallback, Se
         eventMap()
         ServiceLocation.locationLiveData.observe(this) { location ->
             createMyMarker(location.latitude, location.longitude)
-            val currentTime = System.currentTimeMillis()
-
-            if (currentTime - lastSentTime >= 30 * 1000) {
-                viewModel.sendLocationToCustomer(userProfile.id, order.id, location.latitude, location.longitude)
-                lastSentTime = currentTime
-            }
+            viewModel.sendLocationToCustomer(userProfile.id, order.id, location.latitude, location.longitude)
         }
     }
 
